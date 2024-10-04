@@ -99,7 +99,7 @@ const { DB } = require("./config");
     await db.query(cartsTableStmt);
     await db.query(cartItemsTableStmt);
 
-    // Populate tables
+    // Populate products table
     await db.query(populateProductsStmt);
 
     await db.end();
