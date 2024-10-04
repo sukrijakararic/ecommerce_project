@@ -5,7 +5,9 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon -r dotenv/config index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-db": "node -r dotenv/config setupDatabase"
   },
   "author": "Suki",
   "license": "ISC",
