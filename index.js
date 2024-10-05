@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
-const { PORT } = require('./config/config');
+const { PORT } = require('./config');
 
 app.use(cors());
 app.use(helmet());
