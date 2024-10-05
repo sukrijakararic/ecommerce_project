@@ -3,17 +3,18 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-
 const { PORT } = require('./config');
+
+
+const userRouter = require('./routes/user');
 
 app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', (req, res, next) => {
-    res.json({message: 'Welcome to Pleigns!'})
-})
+
+userRouter(app);
 
 
 app.listen(PORT, () => {
