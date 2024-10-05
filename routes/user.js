@@ -1,7 +1,8 @@
 const express = require("express");
 const userRouter = express.Router();
-const { registerUser, showUsers } = require("../queries/user");
+const { registerUser, showUsers, changePAssword, getUserById, deleteUserById , getUserByIdForRouter } = require("../queries/user");
 const passport = require("../strategies/local");
+const { user } = require("pg/lib/defaults");
 
 module.exports = (app) => {
   app.get("/failedLogIn", (req, res) => {
@@ -10,6 +11,8 @@ module.exports = (app) => {
   app.use("/users", userRouter);
 
   userRouter.get("/", showUsers);
+
+  userRouter.get("/:id", getUserByIdForRouter); 
 
   userRouter.post("/register", registerUser);
 
@@ -21,12 +24,18 @@ module.exports = (app) => {
     }
   );
 
+  userRouter.put("/changePassword", changePAssword);
+
+  userRouter.delete("/:id", deleteUserById);
+
   userRouter.get("/logout", (req, res) => {
     req.logout((err) => {
       if (err) {
-        return next(err);
+        console.error(err); // log the error
+        res.status(500).send("Error logging out"); // return an error response
+      } else {
+        res.redirect("/");
       }
-      res.redirect("/");
     });
   });
 };

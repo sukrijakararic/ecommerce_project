@@ -3,7 +3,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const db = require("../db/pool");
-const { getUserByEmailAndPassword, getUserById } = require("../queries/user");
+const { getUserByEmail, getUserById } = require("../queries/user");
 
 //The strategy being created
 passport.use(
@@ -14,7 +14,7 @@ passport.use(
       },
       async (email, password, done) => {
         try {
-          const user = await getUserByEmailAndPassword(email);
+          const user = await getUserByEmail(email);
           if (!user) {
             return done(null, false);
           }
@@ -39,14 +39,18 @@ passport.use(
 
 
 // Deserialize user from session
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await getUserById(id);
-      done(null, user);
-    } catch (err) {
-      done(err, null);
+passport.deserializeUser(async (id, done) => {
+  console.log('deserializeUser called with id:', id);
+  try {
+    const user = await getUserById(id);
+    if (!user) {
+      return done(null, false);
     }
-  });
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 module.exports = passport;
 
