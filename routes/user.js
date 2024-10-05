@@ -28,7 +28,7 @@ module.exports = (app) => {
 
   userRouter.delete("/:id", deleteUserById);
 
-  userRouter.get("/logout", (req, res) => {
+  userRouter.post("/logout", (req, res) => {
     req.logout((err) => {
       if (err) {
         console.error(err); // log the error

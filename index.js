@@ -36,6 +36,8 @@ app.get("/", (req, res) => {
       "Please use PUT /users/changePassword. For /changePassword please input a json of email and password",
     to_Delete_User:
       "Please use DELETE /users/:id to delete a user.",
+      to_Log_out:
+        "Please use POST /users/logout."
     });
 });
 
