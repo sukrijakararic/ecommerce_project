@@ -1,4 +1,14 @@
+const db = require("../db/pool");
+const bcrypt = require("bcrypt");
 
+const showUsers = async (request, response, next) => {
+    try {
+        const result = await db.query("SELECT firstname, lastname FROM users");
+        response.json(result.rows);
+    } catch (err) {
+        console.log(err);
+    }
+}
 // Register a new user
 const registerUser = async (request, response, next) => {
   // Extract the email, password, firstname, and lastname from the request body
@@ -17,7 +27,7 @@ const registerUser = async (request, response, next) => {
     // Return a 201 Created response with the newly inserted user
     response
       .status(201)
-      .json({ message: "User created", user: result.rows[0] });
+      .json({ message: "User created", user: firstname });
   } catch (err) {
     console.log(err);
   }
@@ -38,6 +48,15 @@ const getUserByEmailAndPassword = async (email) => {
   } catch (err) {
     console.log(err);
   }
+
+};
+const getUserById = async (id) => {
+  try {
+    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-module.exports = {registerUser, getUserByEmailAndPassword};
+module.exports = {registerUser, getUserByEmailAndPassword, showUsers, getUserById};

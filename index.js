@@ -27,6 +27,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+app.get('/', (req, res) => {
+    res.json({
+        Greeting: 'Welcome to Pleigns! The best place to buy planes!',
+        to_Make_Account_Or_Log_in: 'Please use POST /users/register or POST /users/login. For /register please input a json of email, password, firstname and lastname and for /login please input a json of email and password. To see all users, go to GET /users'});
+});
+
+
 userRouter(app);
 
 

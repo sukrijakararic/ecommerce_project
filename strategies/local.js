@@ -3,7 +3,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const db = require("../db/pool");
-const { getUserByEmailAndPassword } = require("../queries/user");
+const { getUserByEmailAndPassword, getUserById } = require("../queries/user");
 
 //The strategy being created
 passport.use(
@@ -16,12 +16,12 @@ passport.use(
         try {
           const user = await getUserByEmailAndPassword(email);
           if (!user) {
-            return done(null, false, { message: "Incorrect email or password" });
+            return done(null, false);
           }
   
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (!passwordsMatch) {
-            return done(null, false, { message: "Incorrect email or password" });
+            return done(null, false);
           }
           return done(null, user);
         } catch (err) {
