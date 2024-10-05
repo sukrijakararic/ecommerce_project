@@ -5,10 +5,10 @@ const { DB } = require("./config");
   const usersTableStmt = `
     CREATE TABLE IF NOT EXISTS users (
       id              INT               PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-      email           VARCHAR(50),      
-      password        TEXT,
-      firstName       VARCHAR(50),
-      lastName        VARCHAR(50)
+      email           VARCHAR(50)      NOT NULL,      
+      password        TEXT             NOT NULL,
+      firstName       VARCHAR(50)      NOT NULL,
+      lastName        VARCHAR(50)      NOT NULL
     );
   `;
 
