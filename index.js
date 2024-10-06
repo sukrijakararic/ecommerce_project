@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
     Greetings: "Welcome to Pleigns! The best place to buy planes!",
     to_Make_Account_Or_Log_in:
       "Please use POST /users/register or POST /users/login. For /register please input a json of email, password, firstname and lastname and for /login please input a json of email and password. To see all users, go to GET /users. You can also GET user/:id",
-    to_Change_PAssword:
+    to_Change_Password:
       "Please use PUT /users/changePassword. For /changePassword please input a json of email and password",
     to_Delete_User:
       "Please use DELETE /users/:id to delete a user.",
