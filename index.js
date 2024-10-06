@@ -8,6 +8,7 @@ const passport = require("passport");
 const session = require("express-session");
 
 const userRouter = require("./routes/user");
+const productsRouter = require("./routes/products");
 
 // secuirty
 app.use(cors());
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 });
 
 userRouter(app);
+productsRouter(app);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

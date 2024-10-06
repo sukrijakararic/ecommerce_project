@@ -2,7 +2,6 @@ const express = require("express");
 const userRouter = express.Router();
 const { registerUser, showUsers, changePAssword, getUserById, deleteUserById , getUserByIdForRouter } = require("../queries/user");
 const passport = require("../strategies/local");
-const { user } = require("pg/lib/defaults");
 
 module.exports = (app) => {
   app.get("/failedLogIn", (req, res) => {
