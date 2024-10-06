@@ -39,7 +39,16 @@ passport.use(
 
 
 // Deserialize user from session
+
 passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await getUserById(id);
+    done(null, user || false);
+  } catch (err) {
+    done(err, null);
+  }
+});
+/** passport.deserializeUser(async (id, done) => {
   console.log('deserializeUser called with id:', id);
   try {
     const user = await getUserById(id);
@@ -50,7 +59,7 @@ passport.deserializeUser(async (id, done) => {
   } catch (err) {
     done(err, null);
   }
-});
+}); **/
 
 module.exports = passport;
 
