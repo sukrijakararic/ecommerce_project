@@ -1,10 +1,10 @@
 const db = require("../db/pool");
 
 const getCartByUserId = async (request, response, next) => {
-  const { userid } = request.params;
+  const userId = request.user.id;
   try {
-    const result = await db.query("SELECT * FROM carts WHERE id = $1", [
-      userid,
+    const result = await db.query("SELECT name, price, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1", [
+      userId
     ]);
     response.json(result.rows);
   } catch (err) {
@@ -12,6 +12,16 @@ const getCartByUserId = async (request, response, next) => {
   }
 };
 
+const deleteItemFromCart = async (request, response, next) => {
+  const {productId} = request.body;
+  const userId = request.user.id;
+  try {
+    const result = await db.query("DELETE FROM cartitems WHERE productid = $1 AND cartid = (SELECT id FROM carts WHERE userid = $2)", [ productId, userId ]);
+    response.json(result.rows);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const addProductToCart = async (request, response, next) => {
   if (!request.user) {
     return response.status(401).json({ error: "Unauthorized" });
@@ -56,4 +66,5 @@ const addProductToCart = async (request, response, next) => {
 module.exports = {
   getCartByUserId,
   addProductToCart,
+  deleteItemFromCart
 };

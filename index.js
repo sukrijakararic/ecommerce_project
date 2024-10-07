@@ -47,6 +47,8 @@ app.get("/", (req, res) => {
         "Please use POST /users/logout.",
     to_Get_Products:
       "Please use GET /products. You can also GET products/:productId",
+    to_Add_To_Cart:
+      "Please use POST /cart/addToCart. For /addToCart please input a json of productId and qty (qty can be amount you like)",
     });
 });
 

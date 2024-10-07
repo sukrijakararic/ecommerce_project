@@ -36,7 +36,6 @@ const registerUserAndCreateCart = async (request, response, next) => {
 
     // Return a 201 Created response with the newly inserted user
     response.status(201).json({ message: "User created", user: firstname });
-    request.login(user); // Log in the user
     response.json(user);
   } catch (err) {
     console.log(err);
