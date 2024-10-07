@@ -10,9 +10,9 @@ const showUsers = async (request, response, next) => {
   }
 };
 // Register a new user
-const registerUser = async (request, response, next) => {
+const registerUserAndCreateCart = async (request, response, next) => {
   // Extract the email, password, firstname, and lastname from the request body
-  const { email, password, firstname, lastname } = request.body;
+  const { email, password, firstname, lastname, } = request.body;
 
   // Hash the password using bcrypt
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,6 +22,15 @@ const registerUser = async (request, response, next) => {
     const result = await db.query(
       "INSERT INTO users (email, password, firstName, lastName) VALUES (LOWER($1), $2, $3, $4) RETURNING *",
       [email, hashedPassword, firstname, lastname]
+    );
+
+    const userId = result.rows[0].id;
+    const created = new Date();
+    const modified = new Date();
+
+    await db.query(
+      "INSERT INTO carts (userid, created, modified) VALUES ($1, $2, $3)",
+      [userId, created, modified]
     );
 
     // Return a 201 Created response with the newly inserted user
@@ -126,7 +135,7 @@ const getUserByIdForRouter = async (request, response, next) => {
 };
 
 module.exports = {
-  registerUser,
+  registerUserAndCreateCart,
   getUserByEmail,
   showUsers,
   getUserById,

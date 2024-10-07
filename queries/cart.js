@@ -10,7 +10,7 @@ const getCartByUserId = async (request, response, next) => {
     }
 }
 
-const addProductToCart = async (cartId, productId, quantity) => {
+const addProductToCart = async (request, response, next) => {
     try {
         const result = await db.query("INSERT INTO cartItems (cartId, productId, qty) VALUES ($1, $2, $3) RETURNING *", [cartId, productId, quantity]);
         return result.rows[0];

@@ -1,6 +1,6 @@
 const express = require("express");
 const userRouter = express.Router();
-const { registerUser, showUsers, changePAssword, getUserById, deleteUserById , getUserByIdForRouter } = require("../queries/user");
+const { registerUserAndCreateCart, showUsers, changePAssword, deleteUserById , getUserByIdForRouter } = require("../queries/user");
 const passport = require("../strategies/local");
 
 module.exports = (app) => {
@@ -13,7 +13,7 @@ module.exports = (app) => {
 
   userRouter.get("/:id", getUserByIdForRouter); 
 
-  userRouter.post("/register", registerUser);
+  userRouter.post("/register", registerUserAndCreateCart);
 
   userRouter.post(
     "/login",
