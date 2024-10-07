@@ -3,9 +3,10 @@ const db = require("../db/pool");
 const getCartByUserId = async (request, response, next) => {
   const userId = request.user.id;
   try {
-    const result = await db.query("SELECT name, price, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1", [
-      userId
-    ]);
+    const result = await db.query(
+      "SELECT name, price, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1",
+      [userId]
+    );
     response.json(result.rows);
   } catch (err) {
     console.log(err);
@@ -13,10 +14,13 @@ const getCartByUserId = async (request, response, next) => {
 };
 
 const deleteItemFromCart = async (request, response, next) => {
-  const {productId} = request.body;
+  const { productId } = request.body;
   const userId = request.user.id;
   try {
-    const result = await db.query("DELETE FROM cartitems WHERE productid = $1 AND cartid = (SELECT id FROM carts WHERE userid = $2)", [ productId, userId ]);
+    const result = await db.query(
+      "DELETE FROM cartitems WHERE productid = $1 AND cartid = (SELECT id FROM carts WHERE userid = $2)",
+      [productId, userId]
+    );
     response.json(result.rows);
   } catch (err) {
     console.log(err);
@@ -31,7 +35,9 @@ const addProductToCart = async (request, response, next) => {
     const { productId, qty } = request.body;
 
     if (!productId) {
-      return response.status(400).json({ error: "Missing productId parameter" });
+      return response
+        .status(400)
+        .json({ error: "Missing productId parameter" });
     }
 
     const productResult = await db.query(
@@ -66,5 +72,5 @@ const addProductToCart = async (request, response, next) => {
 module.exports = {
   getCartByUserId,
   addProductToCart,
-  deleteItemFromCart
+  deleteItemFromCart,
 };
