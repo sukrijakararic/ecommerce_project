@@ -10,6 +10,7 @@ const session = require("express-session");
 const userRouter = require("./routes/user");
 const productsRouter = require("./routes/products");
 const cartRouter = require("./routes/cart");
+const orderRouter = require("./routes/order");
 
 // secuirty
 app.use(cors());
@@ -52,12 +53,14 @@ app.get("/", (req, res) => {
     to_See_Your_Cart: "Please use GET /cart/myCart",
     to_Delete_Item_From_Cart:
       "Please use DELETE /cart/deleteItemFromCart. For /deleteItemFromCart please input a json of the specific productId you want to delete from your cart",
+    to_checkout: "Please use POST /cart/checkout",
     });
 });
 
 userRouter(app);
 productsRouter(app);
 cartRouter(app);
+orderRouter(app);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

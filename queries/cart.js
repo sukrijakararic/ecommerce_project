@@ -4,8 +4,31 @@ const getCartByUserId = async (request, response, next) => {
   const userId = request.user.id;
   try {
     const result = await db.query(
-      "SELECT name, price, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1",
+      "SELECT name, SUM(price * qty) AS total, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1 GROUP BY name, description, cartid, productid, qty",
       [userId]
+    );
+    response.json(result.rows);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const checkout = async (request, response, next) => {
+  const userId = request.user.id;
+  const created = new Date();
+  const modified = new Date();
+  const status = "pending";
+
+  try {
+    const cartResult = await db.query(
+      "SELECT SUM(price * qty) AS total FROM carts INNER JOIN cartitems ON carts.id = cartitems.cartid JOIN products ON cartitems.productid = products.id WHERE userid = $1",
+      [userId]
+    );
+    const total = cartResult.rows[0].total;
+
+    const result = await db.query(
+      "INSERT INTO orders (userid, created, modified, status, total) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [userId, created, modified, status, total]
     );
     response.json(result.rows);
   } catch (err) {
@@ -73,4 +96,5 @@ module.exports = {
   getCartByUserId,
   addProductToCart,
   deleteItemFromCart,
+  checkout
 };
