@@ -49,6 +49,9 @@ app.get("/", (req, res) => {
       "Please use GET /products. You can also GET products/:productId",
     to_Add_To_Cart:
       "Please use POST /cart/addToCart. For /addToCart please input a json of productId and qty (qty can be amount you like)",
+    to_See_Your_Cart: "Please use GET /cart/myCart",
+    to_Delete_Item_From_Cart:
+      "Please use DELETE /cart/deleteItemFromCart. For /deleteItemFromCart please input a json of the specific productId you want to delete from your cart",
     });
 });
 
