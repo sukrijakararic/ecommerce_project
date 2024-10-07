@@ -9,6 +9,7 @@ const session = require("express-session");
 
 const userRouter = require("./routes/user");
 const productsRouter = require("./routes/products");
+const cartRouter = require("./routes/cart");
 
 // secuirty
 app.use(cors());
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 
 userRouter(app);
 productsRouter(app);
+cartRouter(app);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
