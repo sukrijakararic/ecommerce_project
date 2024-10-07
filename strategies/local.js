@@ -43,7 +43,7 @@ passport.use(
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await getUserById(id);
-    done(null, user || false);
+    done(null, user);
   } catch (err) {
     done(err, null);
   }

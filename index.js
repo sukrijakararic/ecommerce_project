@@ -17,8 +17,13 @@ app.use(helmet());
 app.use(
   session({
     secret: SESSION_SECRET,
-    resave: true,
+    resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 3600000, // 1 hour
+      httpOnly: true,
+      secure: false, // set to true if you're using HTTPS
+    }
   })
 );
 

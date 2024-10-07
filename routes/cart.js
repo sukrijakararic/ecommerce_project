@@ -5,5 +5,5 @@ const {getCartByUserId, addProductToCart } = require("../queries/cart");
 module.exports = (app) => {
     app.use("/cart", cartRouter);
     cartRouter.get("/:userid", getCartByUserId);
-    //cartRouter.post("/:userid", addProductToCart);
+    cartRouter.post("/addToCart", addProductToCart);
 }
