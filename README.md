@@ -8,7 +8,7 @@ I hope that this project is enjoyable to interact with as it was making it!
 
 ## What you need to run the project on your machine
 
-In order to run the project on your machine, you will need to have Node.js installed. You will also need PgAdmin4 or any other RDBMS. You will also need an HTTP client such as [POSTMAN](https://www.postman.com/) to make requests and finally, a text editor such as [VScode](https://code.visualstudio.com/download).
+In order to run the project on your machine, you will need to have [Node.js](https://nodejs.org/en/download/prebuilt-installer) installed. You will also need [PgAdmin4](https://www.pgadmin.org/download/) or any other RDBMS. You will also need an HTTP client such as [POSTMAN](https://www.postman.com/) to make requests and finally, a text editor such as [VScode](https://code.visualstudio.com/download).
 
 ## How to run the project
 
