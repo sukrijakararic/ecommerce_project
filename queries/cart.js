@@ -1,10 +1,16 @@
 const db = require("../db/pool");
 
+// This function just shows the cart for the logged in user before the order is placed by checking out.
 const getCartByUserId = async (request, response, next) => {
+  if (!request.user) {
+    return response
+      .status(401)
+      .json({ error: "Please log in to veiw your cart" });
+  }
   const userId = request.user.id;
   try {
     const result = await db.query(
-      "SELECT name, SUM(price * qty) AS total, description, cartid, productid, qty FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1 GROUP BY name, description, cartid, productid, qty",
+      "SELECT name, qty, SUM(price * qty) AS total, description, cartid, productid FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1 GROUP BY name, description, cartid, productid, qty",
       [userId]
     );
     response.json(result.rows);
@@ -13,7 +19,14 @@ const getCartByUserId = async (request, response, next) => {
   }
 };
 
+//This function checks out the cart for the logged in user. It runs certain select queries to obtain the necessary information
+//for the order and then inserts it into the orders table.
 const checkout = async (request, response, next) => {
+  if (!request.user) {
+    return response
+      .status(401)
+      .json({ error: "Please log in to view your cart" });
+  }
   const userId = request.user.id;
   const created = new Date();
   const modified = new Date();
@@ -24,20 +37,55 @@ const checkout = async (request, response, next) => {
       "SELECT SUM(price * qty) AS total FROM carts INNER JOIN cartitems ON carts.id = cartitems.cartid JOIN products ON cartitems.productid = products.id WHERE userid = $1",
       [userId]
     );
+
+    const userCartResult = await db.query(
+      "SELECT name, qty, price, description, cartid, productid FROM carts INNER JOIN cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1",
+      [userId]
+    );
+
     const total = cartResult.rows[0].total;
+
+    const orderIdResult = await db.query(
+      "SELECT id FROM orders WHERE userid = $1",
+      [userId]
+    );
+
+    const orderId = orderIdResult.rows[0].id;
+
+    const orderItemsResult = await Promise.all(
+      userCartResult.rows.map(async (item) => {
+        return await db.query(
+          "INSERT INTO orderitems (productid, created, orderid, qty, price, name, description) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+          [
+            item.productid,
+            created,
+            orderId,
+            item.qty,
+            item.price,
+            item.name,
+            item.description,
+          ]
+        );
+      })
+    );
 
     const result = await db.query(
       "INSERT INTO orders (userid, created, modified, status, total) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [userId, created, modified, status, total]
     );
+
     response.json(result.rows);
   } catch (err) {
     console.log(err);
   }
 };
-
 const deleteItemFromCart = async (request, response, next) => {
   const { productId } = request.body;
+  if (!request.user) {
+    return response
+      .status(401)
+      .json({ error: "Please log in to delete items from your cart" });
+  }
   const userId = request.user.id;
   try {
     const result = await db.query(
@@ -51,7 +99,9 @@ const deleteItemFromCart = async (request, response, next) => {
 };
 const addProductToCart = async (request, response, next) => {
   if (!request.user) {
-    return response.status(401).json({ error: "Unauthorized" });
+    return response
+      .status(401)
+      .json({ error: "Please log in to add items to your cart" });
   }
 
   try {
@@ -96,5 +146,5 @@ module.exports = {
   getCartByUserId,
   addProductToCart,
   deleteItemFromCart,
-  checkout
+  checkout,
 };
