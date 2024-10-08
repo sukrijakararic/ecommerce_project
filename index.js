@@ -11,6 +11,7 @@ const userRouter = require("./routes/user");
 const productsRouter = require("./routes/products");
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
+const docs = require("./swagger/swagger");
 
 // secuirty
 app.use(cors());
@@ -58,6 +59,7 @@ app.get("/", (req, res) => {
     to_View_Your_Items_ordered: "Please use GET /orders/viewOrderItems",
     to_Delete_Your_Order:
       "Please use DELETE /orders/deleteOrder",
+    to_See_Docs: "Please use GET /docs",
     });
 });
 
@@ -65,6 +67,7 @@ userRouter(app);
 productsRouter(app);
 cartRouter(app);
 orderRouter(app);
+docs(app);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

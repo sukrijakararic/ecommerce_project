@@ -100,7 +100,7 @@ const deleteItemFromCart = async (request, response, next) => {
       "DELETE FROM cartitems WHERE productid = $1 AND cartid = (SELECT id FROM carts WHERE userid = $2)",
       [productId, userId]
     );
-    response.json(result.rows);
+    response.json({ message: "Item deleted from cart" });
   } catch (err) {
     console.log(err);
   }

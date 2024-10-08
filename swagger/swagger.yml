@@ -1,0 +1,337 @@
+openapi: 3.0.1
+info:
+  title: Pleigns e_commerce project
+  version: 1.0.0
+  description: >-
+    A project that required me to build an e_commerce API to interact with a
+    database. I chose to build an API that will allow a user to perform CRUD operations on mulitple paths.
+    The API is meant for a website where a user can buy planes.
+paths:
+  /:
+    summary: gets root path
+    get:
+      summary: Gets the root path
+      description: Gets the docs and info from the root path
+      operationId: GET /
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful Response:
+                  value: >-
+                    {"Greetings": "Welcome to Pleigns! The best place to buy
+                    planes!",
+
+                    "to_Make_Account_Or_Log_in": "Please use POST
+                    /users/register or POST /users/login. For /register please
+                    input a json of email, password, firstname and lastname and
+                    for /login please input a json of email and password...."
+
+                    }
+      tags:
+        - Root Path
+  /users/register:
+    summary: a path to users
+    post:
+      summary: Adds a user
+      description: Adds a user to the DB
+      operationId: POST /users/register
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful response:
+                  value: |-
+                    {
+                        "message": "User created",
+                        "user": "your user name"
+                    }
+      tags:
+        - /users
+  /users/login:
+    summary: logs in a user
+    post:
+      summary: Logs in a user
+      description: Logs in a user to the api
+      operationId: POST /users/login
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful login:
+                  value: |-
+                    {
+                        "message": "Logged in",
+                        "user": {
+                            "id": 4,
+                            "email": "aminaa@example.com",
+                            "password": "$2b$10$tglV3DNwMIeJvsO.1eWhoOqeYSPlqJvSFF1VtIFJaalmIDre8hXa.",
+                            "firstname": "ahah",
+                            "lastname": "jdjd"
+                        }
+                    }
+      tags:
+        - /users
+  /users/changePassword:
+    summary: changes a password for the user
+    put:
+      summary: changes password
+      description: A PUT statement that changes the user's password
+      operationId: PUT /users/changePassword
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful PUT:
+                  value: '{ "message": "Password changed" }'
+      tags:
+        - /users
+  /users/:id:
+    summary: deletes a user
+    delete:
+      summary: Deletes a user
+      description: Deletes a user from the DB
+      operationId: DELETE /user/:id
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful Delete:
+                  value: '{ "message": "User deleted" }'
+      tags:
+        - /users
+  /users/logout:
+    summary: logs out a user
+    post:
+      summary: Logs out a user
+      description: Logs out a user
+      operationId: POST users/logout
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                'Successful logout returns root / ':
+                  value: >-
+                    {"Greetings": "Welcome to Pleigns! The best place to
+                    buyplanes!",
+                        "to_Make_Account_Or_Log_in": "Please use POST /users/register or POST /users/login. For /register please input a...."}
+      tags:
+        - /users
+  /products:
+    summary: gets products for sale
+    get:
+      summary: Gets all products
+      description: Gets all products for sale. In this case, planes.
+      operationId: /products
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful response:
+                  value: |2-
+                      [{
+                            "id": 1,
+                            "name": "Cessna 172 Skyhawk",
+                            "price": "359000",
+                            "description": "American four-seat, single-engine, high wing, fixed-wing aircraft made by the Cessna Aircraft Company."
+                        },
+                        {
+                            "id": 2,
+                            "name": "Searey",
+                            "price": "1000000",
+                            "description": "The Progressive Aerodyne Searey is an American two-seat, single-engine, amphibious flying boat designed and manufactured by Progressive Aerodyne originally in Orlando, Florida, and now in Tavares, Florida."
+                        }]
+      tags:
+        - /products
+  /products/:id:
+    summary: gets a product from a specific id
+    get:
+      summary: gets a product from a specific id
+      description: gets a product from a specific id
+      operationId: /products/:id
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good response:
+                  value: |-
+                    {
+                            "id": 1,
+                            "name": "Cessna 172 Skyhawk",
+                            "price": "359000",
+                            "description": "American four-seat, single-engine, high wing, fixed-wing aircraft made by the Cessna Aircraft Company."
+                        }
+      tags:
+        - /products
+  /cart/addToCart:
+    summary: adds an item to cart
+    post:
+      summary: adds an item to cart
+      description: adds an item to cart
+      operationId: /cart/addToCart
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good response:
+                  value: '{ "message": "Product added to cart" }'
+      tags:
+        - /cart
+  /cart/myCart:
+    summary: views your cart
+    get:
+      summary: views the cart of the user
+      description: views the cart if the user
+      operationId: /cart/myCart
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                good response:
+                  value: |2-
+                     {
+                            "name": "Cessna 172 Skyhawk",
+                            "qty": 3,
+                            "total": "1077000",
+                            "description": "American four-seat, single-engine, high wing, fixed-wing aircraft made by the Cessna Aircraft Company.",
+                            "cartid": 4,
+                            "productid": 1
+                        }
+      tags:
+        - /cart
+  /cart/deleteItemFromCart:
+    summary: deletes an item from the cart
+    delete:
+      summary: Deletes an item from the cart
+      description: Deletes an item from the cart
+      operationId: /cart/deleteItemFromCart
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good Response:
+                  value: |-
+                    {
+                        "message": "Item deleted from cart"
+                    }
+      tags:
+        - /cart
+  /cart/checkout:
+    summary: Checks out the items in your cart
+    post:
+      summary: Checks out the items from your cart
+      description: Checks out the items from your cart
+      operationId: /cart/checkout
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good response:
+                  value: |2-
+                      {
+                            "id": 6,
+                            "total": 1795000,
+                            "status": "pending",
+                            "userid": 4,
+                            "created": "2024-10-07T22:00:00.000Z",
+                            "modified": "2024-10-07T22:00:00.000Z"
+                        }
+      tags:
+        - /cart
+  /orders/myOrders:
+    summary: Views your orders
+    get:
+      summary: Views your orders
+      description: Views your orders
+      operationId: /orders/myOrders
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good Response:
+                  value: |2-
+                      {
+                            "id": 6,
+                            "total": 1795000,
+                            "status": "pending",
+                            "userid": 4,
+                            "created": "2024-10-07T22:00:00.000Z",
+                            "modified": "2024-10-07T22:00:00.000Z"
+                        }
+      tags:
+        - /orders
+  /orders/viewOrderItems:
+    summary: Views the specific items you ordered
+    get:
+      summary: Views the specific items you ordered
+      description: Views the specific items you ordered
+      operationId: /orders/viewItemOrders
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good Response:
+                  value: |2-
+                        {
+                            "id": 6,
+                            "created": "2024-10-07T22:00:00.000Z",
+                            "orderid": 6,
+                            "qty": 5,
+                            "price": 359000,
+                            "productid": 1,
+                            "name": "Cessna 172 Skyhawk",
+                            "description": "American four-seat, single-engine, high wing, fixed-wing aircraft made by the Cessna Aircraft Company.",
+                            "total": 1795000,
+                            "status": "pending",
+                            "userid": 4,
+                            "modified": "2024-10-07T22:00:00.000Z"
+                        }
+      tags:
+        - /orders
+  /orders/deleteOrder:
+    summary: Deletes your order
+    delete:
+      summary: Deletes your order
+      description: Deletes your order
+      operationId: /orders/deleteOrder
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Good Response:
+                  value: |-
+                    {
+                        "message": "Order deleted"
+                    }
+      tags:
+        - /orders

@@ -13,6 +13,10 @@ const showUsers = async (request, response, next) => {
 const registerUserAndCreateCart = async (request, response, next) => {
   // Extract the email, password, firstname, and lastname from the request body
   const { email, password, firstname, lastname, } = request.body;
+  if (!email || !password || !firstname || !lastname) {
+    response.status(400).json({ message: "All fields are required" });
+    
+  }
 
   // Hash the password using bcrypt
   const hashedPassword = await bcrypt.hash(password, 10);
