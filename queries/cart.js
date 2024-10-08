@@ -13,7 +13,11 @@ const getCartByUserId = async (request, response, next) => {
       "SELECT name, qty, SUM(price * qty) AS total, description, cartid, productid FROM carts INNER JOIN  cartitems ON carts.id = cartitems.cartid join products on cartitems.productid = products.id WHERE userid = $1 GROUP BY name, description, cartid, productid, qty",
       [userId]
     );
-    response.json(result.rows);
+    if (result.rows.length === 0) {
+      return response.json({ message: "No items in cart" });
+    } else {
+      response.json(result.rows);
+    }
   } catch (err) {
     console.log(err);
   }
@@ -44,7 +48,7 @@ const checkout = async (request, response, next) => {
     );
 
     const total = cartResult.rows[0].total;
-    
+
     const result = await db.query(
       "INSERT INTO orders (userid, created, modified, status, total) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [userId, created, modified, status, total]
