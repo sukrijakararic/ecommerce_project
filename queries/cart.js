@@ -44,6 +44,11 @@ const checkout = async (request, response, next) => {
     );
 
     const total = cartResult.rows[0].total;
+    
+    const result = await db.query(
+      "INSERT INTO orders (userid, created, modified, status, total) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [userId, created, modified, status, total]
+    );
 
     const orderIdResult = await db.query(
       "SELECT id FROM orders WHERE userid = $1",
@@ -69,11 +74,10 @@ const checkout = async (request, response, next) => {
       })
     );
 
-    const result = await db.query(
-      "INSERT INTO orders (userid, created, modified, status, total) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [userId, created, modified, status, total]
+    const deleteCartItemsResult = await db.query(
+      "DELETE FROM cartitems WHERE cartid = (SELECT id FROM carts WHERE userid = $1)",
+      [userId]
     );
-
     response.json(result.rows);
   } catch (err) {
     console.log(err);

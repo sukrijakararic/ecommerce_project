@@ -5,13 +5,17 @@ const getOrders = async (request, response, next) => {
     return response
       .status(401)
       .json({ error: "Please log in to see your orders" });
-   }
+  }
   const userId = request.user.id;
   try {
     const result = await db.query("SELECT * FROM orders WHERE userid = $1", [
       userId,
     ]);
-    response.json(result.rows);
+    if (result.rows.length === 0) {
+      return response.json({ message: "No orders found" });
+    } else {
+      response.json(result.rows);
+    }
   } catch (err) {
     console.log(err);
   }
@@ -23,16 +27,17 @@ const viewOrderItems = async (request, response, next) => {
   }
   const userId = request.user.id;
   try {
-    const result = await db.query("SELECT * FROM orderitems JOIN orders ON orderitems.orderid = orders.id WHERE userid = $1", [
-      userId,
-    ]);
+    const result = await db.query(
+      "SELECT * FROM orderitems JOIN orders ON orderitems.orderid = orders.id WHERE userid = $1",
+      [userId]
+    );
     response.json(result.rows);
   } catch (err) {
     console.log(err);
   }
- }
+};
 
-const deleteOrder = async (request, response, next) => { 
+const deleteOrder = async (request, response, next) => {
   if (!request.user) {
     return response.json({ error: "Please log in to delete an order" });
   }
@@ -43,11 +48,13 @@ const deleteOrder = async (request, response, next) => {
       [userId]
     );
 
-    const result = await db.query("DELETE FROM orders WHERE userid = $1", [userId]);
+    const result = await db.query("DELETE FROM orders WHERE userid = $1", [
+      userId,
+    ]);
     response.json({ message: "Order deleted" });
   } catch (err) {
     console.log(err);
   }
-}
+};
 
 module.exports = { getOrders, deleteOrder, viewOrderItems };

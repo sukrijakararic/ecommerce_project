@@ -54,6 +54,10 @@ app.get("/", (req, res) => {
     to_Delete_Item_From_Cart:
       "Please use DELETE /cart/deleteItemFromCart. For /deleteItemFromCart please input a json of the specific productId you want to delete from your cart",
     to_checkout: "Please use POST /cart/checkout",
+    to_View_Your_Orders: "Please use GET /orders/myOrders",
+    to_View_Your_Items_ordered: "Please use GET /orders/viewOrderItems",
+    to_Delete_Your_Order:
+      "Please use DELETE /orders/deleteOrder",
     });
 });
 
