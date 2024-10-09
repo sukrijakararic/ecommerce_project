@@ -1,4 +1,4 @@
-# codecademy e-commerce-rest-api Project / Pleigns
+# e-commerce-rest-api Project / Pleigns
 
 This project was about building a REST API capable of performing CRUD operations on multiple endpoints. I chose to make an API that allows users to buy planes.
 
